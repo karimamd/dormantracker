@@ -1,0 +1,9 @@
+# macOS system files
+.DS_Store
+
+# Python virtual environment
+dormenv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
