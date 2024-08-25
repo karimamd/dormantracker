@@ -1,22 +1,18 @@
-CREATE SCHEMA base;
-
-CREATE TABLE base.tasks (
-	id serial4 NOT NULL,
-	date_added date NULL DEFAULT CURRENT_TIMESTAMP,
-    created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-    title varchar(150) NOT NULL,
-	body text NULL,
-	is_archived bool NULL DEFAULT false,
-    category_id number
-	CONSTRAINT tasks_pkey PRIMARY KEY (id)
+CREATE TABLE tasks (
+    id SERIAL PRIMARY KEY,
+    date_added DATE DEFAULT CURRENT_DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    title VARCHAR(150) NOT NULL,
+    body TEXT,
+    is_archived BOOLEAN DEFAULT FALSE,
+    category_id INTEGER
 );
 
-CREATE TABLE base.categories (
-	id serial4 NOT NULL,
-	date_added date NULL DEFAULT CURRENT_TIMESTAMP,
-    created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-    title varchar(150) NOT NULL,
-	body text NULL,
-	is_archived bool NULL DEFAULT false,
-	CONSTRAINT tasks_pkey PRIMARY KEY (id)
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    date_added DATE DEFAULT CURRENT_DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    title VARCHAR(150) NOT NULL,
+    body TEXT,
+    is_archived BOOLEAN DEFAULT FALSE
 );
