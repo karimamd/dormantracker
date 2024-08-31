@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -36,78 +36,52 @@ class ProgressEntry(db.Model):
     value = db.Column(db.Float, nullable=False)
     task = db.relationship('Task', back_populates='progress_entries')
 
-with app.app_context():
-    db.create_all()
+@app.route('/')
+def index():
+    categories = Category.query.all()
+    tasks = Task.query.all()
+    return render_template('index.html', categories=categories, tasks=tasks)
 
-# API routes
-
-@app.route('/category', methods=['POST'])
-def create_category():
-    data = request.json
-    new_category = Category(name=data['name'])
+@app.route('/add_category', methods=['POST'])
+def add_category():
+    name = request.form['name']
+    new_category = Category(name=name)
     db.session.add(new_category)
     db.session.commit()
-    return jsonify({'message': 'Category created successfully', 'id': new_category.id}), 201
+    return redirect(url_for('index'))
 
-@app.route('/task', methods=['POST'])
-def create_task():
-    data = request.json
-    category = Category.query.get(data['category_id'])
-    if not category:
-        return jsonify({'message': 'Category not found'}), 404
-    
-    new_task = Task(name=data['name'], category=category)
+@app.route('/add_task', methods=['POST'])
+def add_task():
+    name = request.form['name']
+    category_id = request.form['category_id']
+    new_task = Task(name=name, category_id=category_id)
     db.session.add(new_task)
     db.session.commit()
-    
-    for level_data in data.get('levels', []):
-        new_level = TaskLevel(
-            task=new_task,
-            level=level_data['level'],
-            description=level_data['description'],
-            target_value=level_data['target_value'],
-            unit=level_data.get('unit')
-        )
-        db.session.add(new_level)
-    
-    db.session.commit()
-    return jsonify({'message': 'Task created successfully', 'id': new_task.id}), 201
+    return redirect(url_for('index'))
 
-@app.route('/progress', methods=['POST'])
+@app.route('/add_level', methods=['POST'])
+def add_level():
+    task_id = request.form['task_id']
+    level = request.form['level']
+    description = request.form['description']
+    target_value = request.form['target_value']
+    unit = request.form['unit']
+    new_level = TaskLevel(task_id=task_id, level=level, description=description, target_value=target_value, unit=unit)
+    db.session.add(new_level)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+@app.route('/log_progress', methods=['POST'])
 def log_progress():
-    data = request.json
-    task = Task.query.get(data['task_id'])
-    if not task:
-        return jsonify({'message': 'Task not found'}), 404
-    
-    new_entry = ProgressEntry(
-        task=task,
-        date=datetime.strptime(data['date'], '%Y-%m-%d').date(),
-        value=data['value']
-    )
+    task_id = request.form['task_id']
+    date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
+    value = request.form['value']
+    new_entry = ProgressEntry(task_id=task_id, date=date, value=value)
     db.session.add(new_entry)
     db.session.commit()
-    return jsonify({'message': 'Progress logged successfully'}), 201
-
-@app.route('/report', methods=['GET'])
-def get_report():
-    tasks = Task.query.all()
-    report = []
-    for task in tasks:
-        task_report = {
-            'task_name': task.name,
-            'category': task.category.name,
-            'levels_reached': []
-        }
-        for level in task.levels:
-            progress = ProgressEntry.query.filter_by(task_id=task.id).order_by(ProgressEntry.date.desc()).first()
-            if progress and progress.value >= level.target_value:
-                task_report['levels_reached'].append({
-                    'level': level.level,
-                    'description': level.description
-                })
-        report.append(task_report)
-    return jsonify(report)
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
