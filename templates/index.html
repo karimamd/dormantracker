@@ -14,9 +14,22 @@
         ul { list-style-type: none; padding: 0; }
         li { margin-bottom: 10px; }
     </style>
+    <h1>Productivity Tracker</h1>
 </head>
 <body>
-    <h1>Productivity Tracker</h1>
+    
+
+    <h2>Log Progress</h2>
+    <form action="{{ url_for('log_progress') }}" method="post">
+        <select name="task_id" required>
+            {% for task in tasks %}
+                <option value="{{ task.id }}">{{ task.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="date" name="date" required>
+        <input type="number" name="value" placeholder="Progress Value" required>
+        <input type="submit" value="Log Progress">
+    </form>
 
     <h2>Categories</h2>
     <ul>
@@ -70,16 +83,6 @@
         <input type="submit" value="Add Level">
     </form>
 
-    <h2>Log Progress</h2>
-    <form action="{{ url_for('log_progress') }}" method="post">
-        <select name="task_id" required>
-            {% for task in tasks %}
-                <option value="{{ task.id }}">{{ task.name }}</option>
-            {% endfor %}
-        </select>
-        <input type="date" name="date" required>
-        <input type="number" name="value" placeholder="Progress Value" required>
-        <input type="submit" value="Log Progress">
-    </form>
+    
 </body>
 </html>
