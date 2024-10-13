@@ -1,0 +1,62 @@
+{# templates/components/categories_tasks_levels.html #}
+
+{% macro categories_tasks_levels(categories) %}
+<style>
+    .nested-dropdown {
+        list-style-type: none;
+        padding-left: 20px;
+    }
+    .dropdown-toggle {
+        cursor: pointer;
+        user-select: none;
+    }
+    .dropdown-toggle::before {
+        content: '▶';
+        display: inline-block;
+        margin-right: 6px;
+        transition: transform 0.3s;
+    }
+    .dropdown-toggle.active::before {
+        transform: rotate(90deg);
+    }
+    .nested-dropdown > li > ul {
+        display: none;
+    }
+</style>
+
+<h2>Categories, Tasks, and Levels</h2>
+<ul class="nested-dropdown">
+    {% for category in categories %}
+        <li>
+            <span class="dropdown-toggle">{{ category.name }}</span>
+            <ul class="nested-dropdown">
+                {% for task in category.tasks %}
+                    <li>
+                        <span class="dropdown-toggle">{{ task.name }}</span>
+                        <ul class="nested-dropdown">
+                            {% for level in task.levels %}
+                                <li>Level {{ level.level }}: {{ level.description }} ({{ level.target_value }} {{ level.unit }})</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+</ul>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggles = document.querySelectorAll('.dropdown-toggle');
+        toggles.forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const nestedList = this.nextElementSibling;
+                if (nestedList) {
+                    nestedList.style.display = nestedList.style.display === 'block' ? 'none' : 'block';
+                }
+            });
+        });
+    });
+</script>
+{% endmacro %}

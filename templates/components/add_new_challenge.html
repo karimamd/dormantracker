@@ -1,0 +1,35 @@
+{# templates/components/add_new_challenge.html #}
+
+{% macro add_new_challenge(categories, tasks) %}
+<h2>Add New Challenge</h2>
+<h3>Add Category</h3>
+    <form action="{{ url_for('add_category') }}" method="post">
+        <input type="text" name="name" placeholder="Category Name" required>
+        <input type="submit" value="Add Category">
+    </form>
+
+    <h3>Add Task</h3>
+    <form action="{{ url_for('add_task') }}" method="post">
+        <input type="text" name="name" placeholder="Task Name" required>
+        <select name="category_id" required>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Add Task">
+    </form>
+
+    <h3>Add Level</h3>
+    <form action="{{ url_for('add_level') }}" method="post">
+        <select name="task_id" required>
+            {% for task in tasks %}
+                <option value="{{ task.id }}">{{ task.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="number" name="level" placeholder="Level Number" required>
+        <input type="text" name="description" placeholder="Description" required>
+        <input type="number" name="target_value" placeholder="Target Value" required>
+        <input type="text" name="unit" placeholder="Unit" required>
+        <input type="submit" value="Add Level">
+    </form>
+{% endmacro %}

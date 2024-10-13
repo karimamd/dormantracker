@@ -1,75 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productivity Tracker</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
-        h1, h2 { color: #333; }
-        form { margin-bottom: 20px; }
-        input[type="text"], input[type="number"], input[type="date"], select { margin: 5px 0; padding: 5px; }
-        input[type="submit"] { background-color: #4CAF50; color: white; padding: 10px 15px; border: none; cursor: pointer; }
-        input[type="submit"]:hover { background-color: #45a049; }
-        ul { list-style-type: none; padding: 0; }
-        li { margin-bottom: 10px; }
-    </style>
-</head>
+    {% from "components/header.html" import header %}
+    {{ header() }}
+
 <body>
-    <h1>Productivity Tracker</h1>
-
-    <h2>Categories</h2>
-    <ul>
-        {% for category in categories %}
-            <li>{{ category.name }}</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Tasks and Levels</h2>
-    <ul>
-        {% for task in tasks %}
-            <li>
-                <strong>{{ task.name }}</strong> (Category: {{ task.category.name }})
-                <ul>
-                    {% for level in task.levels %}
-                        <li>Level {{ level.level }}: {{ level.description }} ({{ level.target_value }} {{ level.unit }})</li>
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-    </ul>
-
-    <h2>Add Category</h2>
-    <form action="{{ url_for('add_category') }}" method="post">
-        <input type="text" name="name" placeholder="Category Name" required>
-        <input type="submit" value="Add Category">
-    </form>
-
-    <h2>Add Task</h2>
-    <form action="{{ url_for('add_task') }}" method="post">
-        <input type="text" name="name" placeholder="Task Name" required>
-        <select name="category_id" required>
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Add Task">
-    </form>
-
-    <h2>Add Level</h2>
-    <form action="{{ url_for('add_level') }}" method="post">
-        <select name="task_id" required>
-            {% for task in tasks %}
-                <option value="{{ task.id }}">{{ task.name }}</option>
-            {% endfor %}
-        </select>
-        <input type="number" name="level" placeholder="Level Number" required>
-        <input type="text" name="description" placeholder="Description" required>
-        <input type="number" name="target_value" placeholder="Target Value" required>
-        <input type="text" name="unit" placeholder="Unit" required>
-        <input type="submit" value="Add Level">
-    </form>
-
+    
     <h2>Log Progress</h2>
     <form action="{{ url_for('log_progress') }}" method="post">
         <select name="task_id" required>
@@ -81,5 +16,13 @@
         <input type="number" name="value" placeholder="Progress Value" required>
         <input type="submit" value="Log Progress">
     </form>
+
+    {% from "components/categories_tasks_levels.html" import categories_tasks_levels %}
+    {{ categories_tasks_levels(categories) }}
+
+    
+    {% from "components/add_new_challenge.html" import add_new_challenge %}
+    {{ add_new_challenge(categories, tasks) }}
+    
 </body>
 </html>

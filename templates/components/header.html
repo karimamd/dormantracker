@@ -1,0 +1,20 @@
+{# templates/components/header.html #}
+
+{% macro header() %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+        h1, h2 { color: #333; }
+        form { margin-bottom: 20px; }
+        input[type="text"], input[type="number"], input[type="date"], select { margin: 5px 0; padding: 5px; }
+        input[type="submit"] { background-color: #4CAF50; color: white; padding: 10px 15px; border: none; cursor: pointer; }
+        input[type="submit"]:hover { background-color: #45a049; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin-bottom: 10px; }
+    </style>
+    <h1>Productivity Tracker</h1>
+</head>
+{% endmacro %}
