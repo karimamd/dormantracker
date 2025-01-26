@@ -30,4 +30,8 @@ The document shows the description of the vision and goals of the project.
 * Ticking off a habit should be done as easily as binary ones. Meaning that there should be a one click button to finish the habit at the current level.
 * The other option would be to enter the amount of units done.
 * The longer entry mode as well should show logs of comments made and when they were made. For tasks which take several days or habits which build on each other, it is useful to know where to start to tick off the habit.
-* For example when the habit isreading 10 pages of a book, we start from the page we stopped at the day before which should have been entered in the comments.
+* For example when the habit is reading 10 pages of a book, we start from the page we stopped at the day before which should have been entered in the comments.
+* The app should also have a quick way to add new tasks and habits. If their category is not present, it should be created easily and if it is not using the standard levels (Basic, Good, Excellent) it should be added to the list of levels combinations.
+* We should be able to add definitions for amounts of units per level. And unit used per task or level.
+* For example a habit should have a standard unit chosen by the user on creation but when creating levels the user can choose a different unit other than the standard one for the level,
+* For example if the habit is about reading pages of a book, the good level would be set to 10 pages, the basic level would be recommended to be 2 pages and the excellent level would be 20 pages. the other two levels are either recommended by the app or fully manually entered by the user. However the user can choose to have the excellent level to be a chapter, which is a different unit than pages.
