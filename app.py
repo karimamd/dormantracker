@@ -40,7 +40,8 @@ class ProgressEntry(db.Model):
 def index():
     categories = Category.query.all()
     tasks = Task.query.all()
-    return render_template('index.html', categories=categories, tasks=tasks)
+    levels = TaskLevel.query.all()
+    return render_template('index.html', categories=categories, tasks=tasks, levels=levels)
 
 @app.route('/add_category', methods=['POST'])
 def add_category():
